@@ -1,23 +1,25 @@
 # A program that takes a csv file containing raw sensor data for two trials from a titration and constructs 2 graphs for each trial
-# Graph 1 is
+# Graph 1 is fluid volume added vs pH of the solution
+# Graph 2 is slopes between two points vs midpoints between the same two points
 
 # Trial 1 data is Run 2 and Trial 2 data is Run 3 on csv file
 
-import pandas as pd
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
 
 x = []
 y = []
-#Change for other trial 2
+# Change for other trial 2
 trial = 2
 
+# Equilibrium constant of pure water
 Kw = 1e-14
+# Initial Volume
 V0 = 0
 
 #Filepath to the csv file
-filepath = "C:\\Users\\tyler\\Programming\\PublicProjects\\Chemistry1021\\Lab6\\Trial1data.csv"
+filepath = "PublicProjects\\Chemistry1021\\Lab6\\Trial1data.csv"
 with open(filepath, 'r') as csvfile:
     csvreader = csv.DictReader(csvfile)
 
@@ -59,6 +61,8 @@ x2_maxslope = 0
 y1_maxslope = 0
 y2_maxslope = 0
 
+# Finds all slopes and midpoints between points, and checks every linear point combination for the maximum slope between points
+# Variables are used instead of max() so the points with the greatest slope can be stored for later use
 for iter in range(0,len(x)-1):
     xcurrent = x[iter]
     xnext = x[iter+1]
@@ -96,26 +100,9 @@ plt.show()
 
 print(f"Value of steep main rise that occurs is {maxslope} and occurs between ({x1_maxslope},{y1_maxslope}) and ({x2_maxslope},{y2_maxslope})")
 
+# Volume at the equivalence point
 Veq = (x1_maxslope+x2_maxslope)/2
+# Volume at the half equivalence point
 Vhalf = Veq/2
 print(f"Veq = {Veq}")
 print(f"Vhalf = {Vhalf}")
-
-
-#ADJUST AFTER DATA COLLECTED
-pH1 = 4.3307
-pH2 = 4.3704
-V1 = 8.921
-V2 = 9
-pHhalf = 4.3101
-Ka = 10**-pHhalf
-print(f"pHhalf = {pHhalf}")
-print(f"pHhalf approx. = pKa")
-print(f"Ka = {Ka}")
-print(f"Kb = {Kw/Ka}")
-
-MNaOH = 0.1
-nHA = MNaOH * (Veq/1000)
-MCA = nHA/0.02
-
-print(f"MCA = {MCA}")
